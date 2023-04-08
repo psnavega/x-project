@@ -17,8 +17,8 @@ export default function Login({onNewUserClick}: {onNewUserClick: any}) {
     return (
     <>
         <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
-                Entrar
-            </h1>
+            Entrar
+        </h1>
             <form className="mt-6" onSubmit={handleSubmit}>
                 <div className="mb-2">
                     <label

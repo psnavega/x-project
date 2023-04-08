@@ -15,13 +15,14 @@ export default function NewUser({onLoginClick}: {onLoginClick : any}) {
             password: password,
             age: age
         };
-
-        console.warn(formData);
     }
 
 
     return (
         <>
+            <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
+                Criar novo usuário
+            </h1>
             <form className="mt-6" onSubmit={handleSubmit}>
                 <div className="mb-2">
                     <label htmlFor="name" className="block text-sm font-semibold text-gray-800">
