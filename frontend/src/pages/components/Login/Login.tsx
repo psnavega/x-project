@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import Spinner from "../Spinner";
+import Cookies from "js-cookie";
 
 export default function Login({onNewUserClick}: {onNewUserClick: any}) {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ isLoading, setIsLoading ] = useState(false);
+    const [ errorMessage, setErrorMessage ] = useState(false); 
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -15,7 +17,6 @@ export default function Login({onNewUserClick}: {onNewUserClick: any}) {
         };
 
         setIsLoading(true);
-        setTimeout(async () => {
         try {
             const response = await fetch('http://localhost:4000/login', {
                 method: 'POST',
@@ -26,25 +27,35 @@ export default function Login({onNewUserClick}: {onNewUserClick: any}) {
             });
 
             if (response.ok) {
-                console.log('deu boa');
+                const data = await response.json();
+                
+                Cookies.set("token", data.token, { httpOnly: true });
             } else {
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setErrorMessage(true)
+                }, 3000)
+                // setIsLoading(false);
+                // setErrorMessage(true);
+                setTimeout(() => {
+                    setErrorMessage(false);
+                }, 6000)
                 console.log('Deu ruim');
             }
         } catch (e: unknown) {
             console.error(e);
-        } finally {
-            setIsLoading(false);
-        }
-    }, 5000)
-    }
-    
+        // } finally {
+        //     setErrorMessage(false);
+        //     setIsLoading(false);
+        // }
+    }}
 
 
     return (
     <>
         <div
         className={`${
-          isLoading ? "filter blur-sm" : ""
+          isLoading || errorMessage ? "filter blur-sm" : ""
           } transition-all duration-300`}
         >
             <form className="mt-6" onSubmit={handleSubmit}>
@@ -111,6 +122,16 @@ export default function Login({onNewUserClick}: {onNewUserClick: any}) {
                     style={{ zIndex: 9999 }}
                 >
                     <Spinner />
+                </div>
+            )}
+            {errorMessage && (
+                <div
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-100 transition-opacity duration-500"
+                    style={{ zIndex: 9999 }}
+                >
+                    <div className="bg-red-500 text-white px-4 py-2 rounded-md">
+                        Falha na autenticação. Verifique suas credenciais.
+                    </div>
                 </div>
             )}
         </>
