@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  app:
+    build: .
+    ports:
+      - 4000:4000
+    links: 
+     - postgres
+    volumes:
+      - .:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/usr/src/app/posgres
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: example
+      POSTGRES_DATABASE: $POSTGRES_DATABASE
+      POSTGRES_HOST: $POSTGRES_HOST
+      POSTGRES_PORT: $POSTGRES_PORT
+      POSTGRES_ROOT_PASSWORD: $POSTGRES_ROOT_PASSWORD 
+      POSTGRES_CONNECTION: $POSTGRES_CONNECTION
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+volumes:
+  data:
