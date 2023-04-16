@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import Spinner from "../Spinner";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 export default function Login({onNewUserClick}: {onNewUserClick: any}) {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ isLoading, setIsLoading ] = useState(false);
     const [ errorMessage, setErrorMessage ] = useState(false); 
+    const [ sucessMessage, setSucessMessage ] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -30,32 +33,32 @@ export default function Login({onNewUserClick}: {onNewUserClick: any}) {
                 const data = await response.json();
                 
                 Cookies.set("token", data.token, { httpOnly: true });
+
+                setIsLoading(false);
+                setSucessMessage(true);
+                setTimeout(() => {
+                    router.push('/home');
+                }, 2000)
             } else {
-                setTimeout(() => {
-                    setIsLoading(false);
-                    setErrorMessage(true)
-                }, 3000)
-                // setIsLoading(false);
-                // setErrorMessage(true);
-                setTimeout(() => {
-                    setErrorMessage(false);
-                }, 6000)
-                console.log('Deu ruim');
+                setIsLoading(false);
+                setErrorMessage(true);
             }
         } catch (e: unknown) {
             console.error(e);
-        // } finally {
-        //     setErrorMessage(false);
-        //     setIsLoading(false);
-        // }
-    }}
+        } finally {
+            setTimeout(() => {
+                setErrorMessage(false);
+                setSucessMessage(false);
+            }, 2000);
+        }
+    }
 
 
     return (
     <>
         <div
         className={`${
-          isLoading || errorMessage ? "filter blur-sm" : ""
+          isLoading || errorMessage || sucessMessage ? "filter blur-sm" : ""
           } transition-all duration-300`}
         >
             <form className="mt-6" onSubmit={handleSubmit}>
@@ -87,16 +90,7 @@ export default function Login({onNewUserClick}: {onNewUserClick: any}) {
                         className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                     />
                 </div>
-                <a
-                    href="#"
-                    className="text-xs text-purple-600 hover:underline"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        onNewUserClick(true);
-                    }}
-                >
-                    Não possui uma conta? <span className="text-black">Registre-se, é de graça!</span>
-                </a>
+
                 <div className="mt-6">
                     <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600 active:bg-purple-800">
                         Login
@@ -131,6 +125,17 @@ export default function Login({onNewUserClick}: {onNewUserClick: any}) {
                 >
                     <div className="bg-red-500 text-white px-4 py-2 rounded-md">
                         Falha na autenticação. Verifique suas credenciais.
+                    </div>
+                </div>
+            )}
+
+            {sucessMessage && (
+                <div
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-100 transition-opacity duration-500"
+                    style={{ zIndex: 9999 }}
+                >
+                    <div className="bg-green-500 text-white px-4 py-2 rounded-md">
+                        Autenticado com sucesso
                     </div>
                 </div>
             )}
