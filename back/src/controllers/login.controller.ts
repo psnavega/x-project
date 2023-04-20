@@ -1,9 +1,5 @@
 import {
-        getAllUsersService,
-        getUserService,
-        saveUserService,
-        deleteUserService,
-        updateUserService
+    getUserService,
 } from '../services/user.service';
 import { Request, Response } from 'express';
 import { checkPassword } from '../utils/bcrypt.util';
