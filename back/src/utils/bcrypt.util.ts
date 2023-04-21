@@ -3,14 +3,7 @@ import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
 export async function generateHash({ senha }: { senha: string }): Promise<string> {
-    const hash = bcrypt.hash(senha, saltRounds)
-        .then(function(hash: string) {
-            return hash;
-        })
-        .catch(e => {
-            console.log(e);
-            return e.message;
-        })
+    const hash = await bcrypt.hash(senha, saltRounds)
 
     return hash;
 }

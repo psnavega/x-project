@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Token } from "./Token"
 
 @Entity()
 export class User {
@@ -20,4 +21,7 @@ export class User {
 
     @Column()
     updated_at: Date
+
+    @OneToMany(() => Token, (token) => token.user)
+    token: Token[]
 }

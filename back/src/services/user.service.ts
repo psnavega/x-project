@@ -1,4 +1,3 @@
-import { hash } from "bcrypt";
 import { IUser } from "../interfaces/user.interfaces";
 import {
     getAllUsers,

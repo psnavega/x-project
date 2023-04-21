@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-export function factoryToken({ id }: { id: string }) {
+export function factoryToken({ id }: { id: string }): string {
     const token = jwt.sign({ id }, String(process.env.JWT_SECRET), {
-        expiresIn: 300
+        expiresIn: 3600
     });
 
     return token;
