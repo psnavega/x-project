@@ -2,7 +2,7 @@ export interface IUser {
     id: string,
     email: string,
     senha: string,
-    idade: Number,
+    idade: number,
     created_at: Date,
     updated_at: Date,
 }
