@@ -11,6 +11,17 @@ services:
       - ./node_modules:/usr/src/app/node_modules
     environment:
       NODE_ENV: $NODE_ENV
+    depends_on:
+      - postgres
+      - redis
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - data_redis:/usr/src/app/redis
+    depends_on:
+      - postgres
   postgres:
     image: postgres
     ports:
@@ -25,3 +36,4 @@ services:
       POSTGRES_PORT: $POSTGRES_PORT
 volumes:
   data:
+  data_redis:
