@@ -6,10 +6,19 @@ import {
     getAllUsersService
 } from "../services/user.service";
 import { Request, Response } from "express";
+import { client } from "../config/redis/redisConnect";
 
 export async function getAllUsersController(req: Request, res: Response) {
     try {
-        const result = await getAllUsersService();
+        let result;
+        const cacheResult = await client.get('allUsers');
+
+        if (cacheResult === null || cacheResult === undefined) {
+            result = await getAllUsersService();
+            await client.set('allUsers', JSON.stringify(result));
+        } else {
+            result = JSON.parse(cacheResult) as IUser[];
+        }
 
         res.status(200).send({ message: result })
     } catch (e) {
