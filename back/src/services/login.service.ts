@@ -15,7 +15,6 @@ export async function loginService({
         const user = await getUserService({ email });
 
         if (!user) throw new Error('Failed to login');
-        console.log(user);
 
         const result = await checkPassword({ senha: password, databaseSenha: user.senha });
 

@@ -22,6 +22,9 @@ export class Token {
     @Column()
     updated_at: Date
 
+    @Column({ default: true })
+    is_valid: boolean
+
     @ManyToOne(() => User, (user) => user.token)
     @JoinColumn({ name: "user_id" }) 
     user: User
