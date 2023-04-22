@@ -5,5 +5,6 @@ export interface IToken {
     token: string,
     created_at: Date,
     updated_at: Date,
+    is_valid: boolean,
     user: IUser,
 }
