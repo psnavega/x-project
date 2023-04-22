@@ -5,6 +5,7 @@ import express from 'express';
 import { AppDataSource } from './config/postgres/data-source';
 import routes from './routes/index';
 import cors from 'cors';
+import { connectRedis } from './config/redis/redisConnect';
 
 AppDataSource.initialize()
     .then(data => console.log({
@@ -12,9 +13,12 @@ AppDataSource.initialize()
     }))
     .catch(e => console.log(e))
 
+connectRedis();
+
 const app = express();
 app.use(cors());
 routes(app);
+
 
 const port = process.env.PORT || 4000;
 
